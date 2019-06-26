@@ -40,9 +40,19 @@ class App extends React.Component {
   };
 
   onSubmit = model => {
-    model.id = +new Date();
+    let data = [];
+    if (model.id) {
+      data = this.state.data.filter(d => {
+        return d.id !== model.id;
+      });
+    } else {
+      model.id = +new Date();
+      data = this.state.data.slice();
+    }
+
     this.setState({
-      data: [model, ...this.state.data]
+      data: [model, ...data],
+      currentRecord: {}
     });
   };
 

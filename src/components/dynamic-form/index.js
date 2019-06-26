@@ -7,25 +7,35 @@ export default class DynamicForm extends React.Component {
   // }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    // console.log(nextProps);
-    console.log(prevState);
+    if (prevState.submitted === true) {
+      for (let key in prevState) {
+        prevState[key] = '';
+      }
+      return { ...prevState };
+    }
+
     if (
       nextProps.defaultValues &&
-      Object.keys(nextProps.defaultValues).length &&
-      !prevState.id
+      Object.keys(nextProps.defaultValues).length
     ) {
-      console.log('yipee');
+      if (
+        prevState.id &&
+        nextProps.defaultValues.id &&
+        prevState.id === nextProps.defaultValues.id
+      ) {
+        return {
+          ...prevState
+        };
+      }
       return {
         ...nextProps.defaultValues
       };
     } else {
-      console.log(nextProps.model);
       let initialState = nextProps.model.reduce((acc, m) => {
         let defaultVal = prevState[m.key] || '';
-        acc[m.key] = m.value ? m.value : defaultVal;
+        acc[m.key] = defaultVal;
         return acc;
       }, {});
-      console.log('initialState: ', initialState);
       return {
         ...initialState
       };
@@ -34,15 +44,17 @@ export default class DynamicForm extends React.Component {
 
   onSubmit = e => {
     e.preventDefault();
-    let state = { ...this.state };
+    let formState = { ...this.state };
     if (this.props.onSubmit) {
-      this.props.onSubmit(state);
+      this.props.onSubmit(formState);
+      this.setState({
+        submitted: true
+      });
     }
   };
 
   onChange = (e, key, type = 'single') => {
     if (type === 'single') {
-      console.log(key, e.target.value);
       this.setState({
         [key]: e.target.value
       });
@@ -69,7 +81,6 @@ export default class DynamicForm extends React.Component {
         });
       }
     }
-    console.log(this.state);
   };
 
   renderForm = () => {
@@ -181,7 +192,6 @@ export default class DynamicForm extends React.Component {
     return formUI;
   };
   render() {
-    console.log(this.state);
     let title = this.props.title || 'Dynamic Form';
     return (
       <div>
