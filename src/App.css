@@ -1,7 +1,8 @@
 .showcase {
-  width: 300px;
-  height: 600px;
+  width: 500px;
+  height: 400px;
   padding: 0 20px;
+  padding-top: 15px;
 }
 
 .json-input {

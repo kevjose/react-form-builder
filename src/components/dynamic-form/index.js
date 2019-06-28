@@ -11,6 +11,7 @@ export default class DynamicForm extends React.Component {
       for (let key in prevState) {
         prevState[key] = '';
       }
+      delete prevState['submitted'];
       return { ...prevState };
     }
 
@@ -194,16 +195,21 @@ export default class DynamicForm extends React.Component {
     return formUI;
   };
   render() {
-    let title = this.props.title || 'Dynamic Form';
+    // let title = this.props.title || 'Dynamic Form';
     return (
-      <div>
+      <div
+        style={{
+          maxHeight: '400px',
+          overflowY: 'scroll',
+          paddingLeft: '4px'
+        }}
+      >
         <form
           className="ui form"
           onSubmit={e => {
             this.onSubmit(e);
           }}
         >
-          <h4 className="ui dividing header">{title}</h4>
           {this.renderForm()}
           <div>
             <button type="submit" className="ui button basic positive">
