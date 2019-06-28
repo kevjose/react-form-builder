@@ -5,36 +5,62 @@ import './App.css';
 
 class App extends React.Component {
   state = {
-    data: [
+    data: [],
+    model: [
+      { key: 'name', label: 'Name', props: { required: true } },
+      { key: 'age', label: 'Age', type: 'number' },
       {
-        id: 1,
-        name: 'a',
-        age: 29,
-        qualification: 'B.Com',
-        rating: 3,
-        gender: 'male',
-        city: 'Kerala',
-        skills: ['reactjs', 'angular', 'vuejs']
+        key: 'rating',
+        label: 'Rating',
+        type: 'number',
+        props: { min: 0, max: 5 }
       },
       {
-        id: 2,
-        name: 'b',
-        age: 35,
-        qualification: 'B.Sc',
-        rating: 5,
-        gender: 'female',
-        city: 'Mumbai',
-        skills: ['reactjs', 'angular']
+        key: 'gender',
+        label: 'Gender',
+        type: 'radio',
+        options: [
+          {
+            key: 'male',
+            label: 'Male',
+            name: 'gender',
+            value: 'male'
+          },
+          {
+            key: 'female',
+            label: 'Female',
+            name: 'gender',
+            value: 'female'
+          }
+        ]
+      },
+      { key: 'qualification', label: 'Qualification' },
+      {
+        key: 'city',
+        label: 'City',
+        type: 'select',
+        value: 'Kerala',
+        props: { required: true },
+        options: [
+          { key: '_placeholder', label: 'Select a city', value: '' },
+          { key: 'mumbai', label: 'Mumbai', value: 'Mumbai' },
+          {
+            key: 'bangalore',
+            label: 'Bangalore',
+            value: 'Bangalore'
+          },
+          { key: 'kerala', label: 'Kerala', value: 'Kerala' }
+        ]
       },
       {
-        id: 3,
-        name: 'c',
-        age: 42,
-        qualification: 'B.E',
-        rating: 3,
-        gender: 'female',
-        city: 'Bangalore',
-        skills: ['reactjs']
+        key: 'skills',
+        label: 'Skills',
+        type: 'checkbox',
+        options: [
+          { key: 'reactjs', label: 'ReactJS', value: 'reactjs' },
+          { key: 'angular', label: 'Angular', value: 'angular' },
+          { key: 'vuejs', label: 'VueJS', value: 'vuejs' }
+        ]
       }
     ]
   };
@@ -77,71 +103,43 @@ class App extends React.Component {
           <td>{d.city}</td>
           <td>{d.skills && d.skills.length ? d.skills.join(', ') : ''}</td>
           <td>
-            <button onClick={() => this.onEdit(d.id)}>Edit</button>
+            <button
+              className="ui button basic negative"
+              onClick={() => this.onEdit(d.id)}
+            >
+              Edit
+            </button>
           </td>
         </tr>
       );
     });
     return (
-      <div className="App">
-        <DynamicForm
-          title="Registration"
-          defaultValues={this.state.currentRecord}
-          model={[
-            { key: 'name', label: 'Name', props: { required: true } },
-            { key: 'age', label: 'Age', type: 'number' },
-            {
-              key: 'rating',
-              label: 'Rating',
-              type: 'number',
-              props: { min: 0, max: 5 }
-            },
-            {
-              key: 'gender',
-              label: 'Gender',
-              type: 'radio',
-              options: [
-                { key: 'male', label: 'Male', name: 'gender', value: 'male' },
-                {
-                  key: 'female',
-                  label: 'Female',
-                  name: 'gender',
-                  value: 'female'
-                }
-              ]
-            },
-            { key: 'qualification', label: 'Qualification' },
-            {
-              key: 'city',
-              label: 'City',
-              type: 'select',
-              value: 'Kerala',
-              props: { required: true },
-              options: [
-                { key: '_placeholder', label: 'Select a city', value: '' },
-                { key: 'mumbai', label: 'Mumbai', value: 'Mumbai' },
-                { key: 'bangalore', label: 'Bangalore', value: 'Bangalore' },
-                { key: 'kerala', label: 'Kerala', value: 'Kerala' }
-              ]
-            },
-            {
-              key: 'skills',
-              label: 'Skills',
-              type: 'checkbox',
-              options: [
-                { key: 'reactjs', label: 'ReactJS', value: 'reactjs' },
-                { key: 'angular', label: 'Angular', value: 'angular' },
-                { key: 'vuejs', label: 'VueJS', value: 'vuejs' }
-              ]
-            }
-          ]}
-          onSubmit={model => {
-            this.onSubmit(model);
-          }}
-        />
-        <table border="1">
-          <tbody>{data}</tbody>
-        </table>
+      <div className="ui container" style={{ paddingTop: '50px' }}>
+        <div className="ui three column stackable grid container">
+          <div className="showcase">
+            <textarea
+              style={{ fontFamily: 'monospace' }}
+              className="json-input"
+              value={JSON.stringify(this.state.model, null, 2)}
+            />
+          </div>
+          <div className="column">
+            <DynamicForm
+              title="Registration"
+              defaultValues={this.state.currentRecord}
+              model={this.state.model}
+              onSubmit={model => {
+                this.onSubmit(model);
+              }}
+            />
+          </div>
+          <div className="column">
+            <h4 className="ui dividing header">Data</h4>
+            <table className="ui stacked table">
+              <tbody>{data}</tbody>
+            </table>
+          </div>
+        </div>
       </div>
     );
   }

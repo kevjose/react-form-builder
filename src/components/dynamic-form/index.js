@@ -109,7 +109,7 @@ export default class DynamicForm extends React.Component {
         input = m.options.map(o => {
           let checked = o.value === value;
           return (
-            <React.Fragment key={'fr' + o.key}>
+            <div key={'fr' + o.key} className="inline field">
               <input
                 {...props}
                 type={type}
@@ -122,7 +122,7 @@ export default class DynamicForm extends React.Component {
                 }}
               />
               <label key={'ll' + o.key}>{o.label}</label>
-            </React.Fragment>
+            </div>
           );
         });
       }
@@ -148,6 +148,7 @@ export default class DynamicForm extends React.Component {
             onChange={e => {
               this.onChange(e, m.key);
             }}
+            className="ui fluid dropdown"
           >
             {input}
           </select>
@@ -162,8 +163,9 @@ export default class DynamicForm extends React.Component {
           }
 
           return (
-            <React.Fragment key={'cfr' + o.key}>
+            <div key={'cfr' + o.key} className="inline field">
               <input
+                className="ui checkbox"
                 {...props}
                 type={type}
                 key={o.key}
@@ -175,13 +177,13 @@ export default class DynamicForm extends React.Component {
                 }}
               />
               <label key={'ll' + o.key}>{o.label}</label>
-            </React.Fragment>
+            </div>
           );
         });
       }
 
       return (
-        <div key={key}>
+        <div key={key} className="field">
           <label key={'l' + m.key} htmlFor={m.key}>
             {m.label}
           </label>
@@ -195,15 +197,18 @@ export default class DynamicForm extends React.Component {
     let title = this.props.title || 'Dynamic Form';
     return (
       <div>
-        <h3>{title}</h3>
         <form
+          className="ui form"
           onSubmit={e => {
             this.onSubmit(e);
           }}
         >
+          <h4 className="ui dividing header">{title}</h4>
           {this.renderForm()}
           <div>
-            <button type="submit">Submit</button>
+            <button type="submit" className="ui button basic positive">
+              Submit
+            </button>
           </div>
         </form>
       </div>
